@@ -15,7 +15,6 @@ const Home = () => {
   useEffect(() => {
     if (postStatus === 'idle') {
       dispatch(fetchPosts(selectedSubreddit))
-
     }
   }, [postStatus, selectedSubreddit, dispatch])
 
@@ -33,7 +32,7 @@ const Home = () => {
    */
 
   return (
-    <>
+    <div className='wrapper'>
       {posts.map((post, index) => (
         <Post 
           key={index}
@@ -41,7 +40,7 @@ const Home = () => {
         />
 
       ))}
-    </>
+    </div>
   );
 }
  

@@ -41,7 +41,6 @@ export default subredditSlice.reducer;
 export const fetchSubreddits = createAsyncThunk('subreddit/fetchSubreddits', async () => {
   try {
     const response = await getSubreddits();
-    console.log(response)
     return response;
   } catch (err) {
     console.log(err)
