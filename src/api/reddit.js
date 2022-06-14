@@ -1,19 +1,8 @@
-/**
- * import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { formatUserName } from './utils';
-import './App.css';
+// Load the data from the server
 
-function App() {
- const [users, setUsers] = useState([]);
+export const getSubredditPosts = async (subreddit) => {
+  const response = await fetch('https://www.reddit.com/r/popular.json');
+  const json = await response.json();
 
- // Load the data from the server
- useEffect(() => {
-   let mounted = true;
-
-   const getUsers = async () => {
-     const response = await axios.get('https://jsonplaceholder.typicode.com/users');
-     if (mounted) {
-       setUsers(response.data);
-     }
- */
+  return json.children.map(post => post.data);
+}
