@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Post from '../Post/Post';
 // import { children as posts } from '../../api/mockApi.js';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectRedditState, getPostsFromSubreddit } from '../../store/redditSlice';
+import { selectRedditState, fetchPosts } from '../../store/redditSlice';
 
 //get posts in here, dynamically render to posts
 
@@ -14,7 +14,8 @@ const Home = () => {
 
   useEffect(() => {
     if (postStatus === 'idle') {
-      dispatch(getPostsFromSubreddit(selectedSubreddit))
+      dispatch(fetchPosts(selectedSubreddit))
+
     }
   }, [postStatus, selectedSubreddit, dispatch])
 

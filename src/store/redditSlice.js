@@ -11,7 +11,7 @@ const initialState = {
 };
 
 export const redditSlice = createSlice({
-  name: 'redditPosts',
+  name: 'reddit',
   initialState,
   reducers: {
     setPosts: (state, action) => {
@@ -27,15 +27,15 @@ export const redditSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(getPostsFromSubreddit.pending, (state, action) => {
+      .addCase(fetchPosts.pending, (state, action) => {
         state.status = 'loading'
       })
-      .addCase(getPostsFromSubreddit.fulfilled, (state, action) => {
+      .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = 'suceeded'
         // add any fetched posts to the array
         state.posts = state.posts.concat(action.payload)
       })
-      .addCase(getPostsFromSubreddit.rejected, (state, action) => {
+      .addCase(fetchPosts.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
       })
@@ -48,16 +48,10 @@ export const { setPosts, setSearchTerm, setSelectedSubreddit } = redditSlice.act
 export default redditSlice.reducer;
 
 // Redux Thunk to get posts from a subreddit
-
-/**
- * 1. A "start" action is dispatched before the request, to indicate that the request is in progress.
- * This may be used to track loading state to allow skipping duplicate requests or show loading indicators in the UI.
- */
-export const getPostsFromSubreddit = createAsyncThunk('reddit/getPostsFromSubreddit', async (subreddit) => {
+export const fetchPosts = createAsyncThunk('reddit/fetchPosts', async (subreddit) => {
     try {
       const response = await getSubredditPosts(subreddit);
-      console.log(response)
-      return response.data.children
+      return response;
     } catch (err) {
       console.log(err);
   }

@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setSearchTerm } from '../../store/redditSlice';
 import './Header.css';
 
 const Header = () => {
-const [ searchTerm, setSearchTerm ] = useState('');
+const dispatch = useDispatch();
+const [ search, setSearch ] = useState('');
 
 const onSearchTermChange = (e) => {
-  setSearchTerm(e.target.value);
+  setSearch(e.target.value);
 }
 
-useEffect(() => {
-  setSearchTerm(searchTerm)
-}, [searchTerm])
+// useEffect(() => {
+//   setSearchTerm(searchTerm)
+// }, [searchTerm])
 
 const onSearchTermSubmit = (e) => {
   e.preventDefault();
   //dispatch here
-  console.log(searchTerm);
-
+  dispatch(setSearchTerm(search))
+  console.log(setSearchTerm(search));
 }
+
+// If you want to search for “cake recipes”:
+
+// Original URL: https://www.reddit.com/search?q=cake%20recipes
+// JSON URL: https://www.reddit.com/search.json?q=cake%20recipes
 
   return (
     <div>
@@ -26,7 +34,7 @@ const onSearchTermSubmit = (e) => {
           <input 
             type="text" 
             placeholder="Search" 
-            value={searchTerm} 
+            value={search} 
             onChange={onSearchTermChange}
             aria-label="Search posts"
           />

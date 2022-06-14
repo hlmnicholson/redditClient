@@ -12,7 +12,6 @@ const epochDateConverter = (epoch) => {
 }
 
 const Post = ({ post }) => {
-
   return (
     <Card>
       <div className="post-wrapper">
