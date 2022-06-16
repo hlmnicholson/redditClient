@@ -1,0 +1,13 @@
+.icon {
+  max-width: 20%;
+}
+
+.subreddit-wrapper {
+  display: flex;
+}
+
+.subreddit-container {
+  margin-top: 2%;
+  border: 2px solid red;
+  width: 100%;
+}

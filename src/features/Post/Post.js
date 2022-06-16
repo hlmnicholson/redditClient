@@ -13,15 +13,19 @@ const epochDateConverter = (epoch) => {
 
 const Post = ({ post }) => {
   return (
-    <Card>
+    <article key={post.id}>
       <div className="post-wrapper">
-      Title: {post.data.title}
-      Author: {post.data.author}
-      <img src={post.data.url} alt="" />
-      {post.data.score}
-      {epochDateConverter(post.data.created)}
-    </div>
-    </Card>
+      <Card>
+        <div className="post-container">
+        Title: {post.title}
+        Author: {post.author}
+        <img src={post.url} alt="" />
+        {post.score}
+        {epochDateConverter(post.created)}
+        </div>
+      </Card>
+      </div>
+    </article>
   );
 }
  

@@ -23,7 +23,7 @@ export const subredditSlice = createSlice({
       .addCase(fetchSubreddits.fulfilled, (state, action) => {
         state.status = 'suceeded'
         // add any fetched subreddits to the array
-        state.subreddits = state.subreddits.concat(action.payload)
+        state.subreddits = action.payload
       })
       .addCase(fetchSubreddits.rejected, (state, action) => {
         state.status = 'failed'

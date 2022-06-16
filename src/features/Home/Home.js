@@ -9,7 +9,6 @@ import { selectRedditState, fetchPosts } from '../../store/redditSlice';
 const Home = () => {
   const dispatch = useDispatch();
   const { posts, searchTerm, selectedSubreddit, status, error } = useSelector(selectRedditState);
-
   const postStatus = useSelector(state => state.reddit.status)
 
   useEffect(() => {
