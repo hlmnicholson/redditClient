@@ -1,19 +1,16 @@
-/**
- * import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { formatUserName } from './utils';
-import './App.css';
+// Load the data from the server
+export const API_ROOT = 'https://www.reddit.com'
 
-function App() {
- const [users, setUsers] = useState([]);
+export const getSubredditPosts = async (subreddit) => {
+  const response = await fetch(`${API_ROOT}${subreddit}.json`);
+  const json = await response.json();
 
- // Load the data from the server
- useEffect(() => {
-   let mounted = true;
+  return json.data.children.map(child => child.data);
+}
 
-   const getUsers = async () => {
-     const response = await axios.get('https://jsonplaceholder.typicode.com/users');
-     if (mounted) {
-       setUsers(response.data);
-     }
- */
+export const getSubreddits = async () => {
+  const response = await fetch(`${API_ROOT}/subreddits.json`);
+  const json = await response.json();
+
+  return json.data.children.map(child => child.data);
+}

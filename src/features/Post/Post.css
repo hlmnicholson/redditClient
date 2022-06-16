@@ -1,0 +1,20 @@
+img {
+  max-width: 100%;
+}
+
+.post-wrapper {
+  padding-bottom: 3%;
+} 
+
+.post-container {
+  display: flex;
+  border: 2px solid grey;
+}
+
+.score {
+  padding: 5%;
+}
+
+
+/* justify-content: space-between;
+align-items: center; */
