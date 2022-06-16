@@ -39,7 +39,7 @@ const Subreddits = () => {
               >
                 <img 
                   className="subreddit-icon" 
-                  src={subreddit.icon_img || `https://api.adorable.io/avatars/25/${subreddit.display_name}`} 
+                  src={subreddit.icon_img || `https://img.icons8.com/flat-round/344/link--v1.png`} 
                   alt={`${subreddit.display_name}`} 
                 />
                 {subreddit.display_name}

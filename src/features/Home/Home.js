@@ -12,10 +12,9 @@ const Home = () => {
   const postStatus = useSelector(state => state.reddit.status)
 
   useEffect(() => {
-    if (postStatus === 'idle') {
       dispatch(fetchPosts(selectedSubreddit))
-    }
-  }, [postStatus, selectedSubreddit, dispatch])
+    }, [selectedSubreddit, dispatch])
+
 
   /**
    * useEffect to dispatch and fetchPosts for selected Subreddit
@@ -31,15 +30,15 @@ const Home = () => {
    */
 
   return (
-    <div className='wrapper'>
+    <>
       {posts.map((post, index) => (
         <Post 
-          key={index}
-          post={post}
+          key={post.id}
+          post={post} 
         />
 
       ))}
-    </div>
+    </>
   );
 }
  

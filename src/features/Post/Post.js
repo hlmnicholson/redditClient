@@ -20,7 +20,7 @@ const Post = ({ post }) => {
           <div className="score">
             {post.score}
           </div>
-          <div>
+          <div className="content">
             Title: {post.title}
             Author: {post.author}
             <img src={post.url} alt="" />

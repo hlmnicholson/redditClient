@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getSubredditPosts } from "../api/reddit";
-// import { children } from "../api/mockApi";
 
 const initialState = {
   posts: [],
@@ -21,8 +20,8 @@ export const redditSlice = createSlice({
      state.searchTerm = action.payload;
     },
     setSelectedSubreddit: (state, action) => {
-      console.log(action.payload)
       state.selectedSubreddit = action.payload;
+      state.status = 'idle';
     },
     // voteAdded (can use the logic of reactionAdded from redux tutorial)
   },
@@ -34,7 +33,7 @@ export const redditSlice = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = 'suceeded'
         // add any fetched posts to the array
-        state.posts = state.posts.concat(action.payload)
+        state.posts = action.payload
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = 'failed'
