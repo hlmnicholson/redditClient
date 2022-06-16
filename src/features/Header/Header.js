@@ -28,7 +28,7 @@ const onSearchTermSubmit = (e) => {
 // JSON URL: https://www.reddit.com/search.json?q=cake%20recipes
 
   return (
-    <div>
+    <div className='header'>
       <h1>Reddit Friend</h1>
       <form className="search" onSubmit={onSearchTermSubmit}>
           <input 

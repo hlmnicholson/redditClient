@@ -2,12 +2,33 @@
   max-width: 20%;
 }
 
-.subreddit-wrapper {
-  display: flex;
+.subreddit-card {
+  /* border: 2px solid green; */
+  width: 100%;
 }
 
-.subreddit-container {
-  margin-top: 2%;
-  border: 2px solid red;
+.subreddit-list {
+  /* border: 2px solid red; */
+  
   width: 100%;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+li {
+  /* border: 2px solid yellow; */
+
+  list-style-type: none;
+  width: 100%;
+  margin: 0;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  display: flex;
 }

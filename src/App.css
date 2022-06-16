@@ -5,9 +5,9 @@
 
 
 main {
-  max-width: 60%;
+
 }
 
 aside {
-  max-width: 40%;
+  border: 2px solid black;
 }
