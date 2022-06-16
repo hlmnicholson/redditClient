@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import Post from '../Post/Post';
-// import { children as posts } from '../../api/mockApi.js';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectRedditState, fetchPosts } from '../../store/redditSlice';
-
-//get posts in here, dynamically render to posts
+import { fetchPosts, selectPostIds } from '../../store/redditSlice';
+import { Spinner } from '../../components/Spinner/Spinner';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { posts, searchTerm, selectedSubreddit, status, error } = useSelector(selectRedditState);
   const postStatus = useSelector(state => state.reddit.status)
+  const selectedSubreddit = useSelector(state => state.reddit.selectedSubreddit)
+  const postIds = useSelector(selectPostIds)
+  const error = useSelector(state => state.reddit.error)
 
   useEffect(() => {
       dispatch(fetchPosts(selectedSubreddit))
@@ -29,15 +29,21 @@ const Home = () => {
    * if posts.length === 0
    */
 
+  let content
+
+  if (postStatus === 'loading') {
+    content = <Spinner test="Loading..." />
+  } else if (postStatus === 'succeeded') {
+    content = postIds.map(postId => (
+      <Post key={postId} postId={postId} />
+    ))
+  } else if (postStatus === 'error') {
+    content = <div>{error}</div>
+  }
+
   return (
     <>
-      {posts.map((post, index) => (
-        <Post 
-          key={post.id}
-          post={post} 
-        />
-
-      ))}
+    {content}
     </>
   );
 }
