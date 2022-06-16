@@ -21,6 +21,7 @@ export const redditSlice = createSlice({
      state.searchTerm = action.payload;
     },
     setSelectedSubreddit: (state, action) => {
+      console.log(action.payload)
       state.selectedSubreddit = action.payload;
     },
     // voteAdded (can use the logic of reactionAdded from redux tutorial)

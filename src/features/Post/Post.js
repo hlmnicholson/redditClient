@@ -17,11 +17,15 @@ const Post = ({ post }) => {
       <div className="post-wrapper">
       <Card>
         <div className="post-container">
-        Title: {post.title}
-        Author: {post.author}
-        <img src={post.url} alt="" />
-        {post.score}
-        {epochDateConverter(post.created)}
+          <div className="score">
+            {post.score}
+          </div>
+          <div>
+            Title: {post.title}
+            Author: {post.author}
+            <img src={post.url} alt="" />
+            {epochDateConverter(post.created)}
+          </div>
         </div>
       </Card>
       </div>

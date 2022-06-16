@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import Card from '../../components/Card/Card';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSubreddits, selectSubredditState } from '../../store/subRedditSlice';
+import { setSelectedSubreddit } from '../../store/redditSlice';
 import './Subreddits.css';
 
 const Subreddits = () => {
   const dispatch = useDispatch();
   const { subreddits } = useSelector(selectSubredditState);
   const subredditStatus = useSelector(state => state.subreddits.status)
-
+  const selectedSubreddit = useSelector(setSelectedSubreddit);
 
   useEffect(() => {
     if (subredditStatus === 'idle') {
@@ -16,8 +17,9 @@ const Subreddits = () => {
     }
   }, [subredditStatus, dispatch])
 
-// the selected button needs to dispatch an action to the reddit reducer
-  console.log(subreddits.map(sub => [sub.display_name, sub.id]))
+
+  // console.log(subreddits.map(sub => [sub.display_name_prefixed, sub.id]))
+
 
   return (
     <div>
@@ -26,10 +28,17 @@ const Subreddits = () => {
           <ul className="subreddit-list">
           {subreddits.map((subreddit) => (
             // add className dynamically to allow for routing
-            <li key={subreddit.id}>
-              <button>
+            <li 
+              key={subreddit.id}
+              className={`${
+                selectedSubreddit === subreddit.url && `selected-subreddit`
+              }`}>
+              <button 
+                onClick={() => dispatch(setSelectedSubreddit(subreddit.url))}
+                type="button"
+              >
                 <img 
-                  className="icon" 
+                  className="subreddit-icon" 
                   src={subreddit.icon_img || `https://api.adorable.io/avatars/25/${subreddit.display_name}`} 
                   alt={`${subreddit.display_name}`} 
                 />

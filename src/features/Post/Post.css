@@ -3,12 +3,16 @@ img {
 }
 
 .post-wrapper {
-  display: flex;
-}
+  padding-bottom: 3%;
+} 
 
 .post-container {
-  margin-top: 5%;
+  display: flex;
   border: 2px solid grey;
+}
+
+.score {
+  padding: 5%;
 }
 
 

@@ -19,7 +19,7 @@ const onSearchTermSubmit = (e) => {
   e.preventDefault();
   //dispatch here
   dispatch(setSearchTerm(search))
-  console.log(setSearchTerm(search));
+  // console.log(setSearchTerm(search));
 }
 
 // If you want to search for “cake recipes”:
