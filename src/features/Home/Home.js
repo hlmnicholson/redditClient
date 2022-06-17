@@ -36,15 +36,16 @@ const Home = () => {
   } else if (postStatus === 'succeeded') {
     content = postIds.map(postId => (
       <Post key={postId} postId={postId} />
-    ))
-  } else if (postStatus === 'error') {
-    content = <div>{error}</div>
-  }
+      ))
+    } else if (postStatus === 'error') {
+      content = <div>{error}</div>
+    }
+
 
   return (
-    <>
+    <section className="post-list">
     {content}
-    </>
+    </section>
   );
 }
  

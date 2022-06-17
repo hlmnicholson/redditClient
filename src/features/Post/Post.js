@@ -1,20 +1,16 @@
 
 import React from 'react';
+import { useSelector } from 'react-redux/es/exports';
 import Card from '../../components/Card/Card';
+import { selectPostById } from '../../store/redditSlice';
+import { TimeAgo } from './TimeAgo';
 import './Post.css';
 
-// posts are dynamically rendered by the Home component to here
 
-// UPDATE THIS
-const epochDateConverter = (epoch) => {
-  const fullDate = new Date(epoch *100).toLocaleString();
-  return fullDate
-}
-
-const Post = ({ post }) => {
+const Post = ({ postId }) => {
+  const post = useSelector(state => selectPostById(state, postId))
   return (
-    <article key={post.id}>
-      <div className="post-wrapper">
+    <article className="post-wrapper" key={post.id}>
       <Card>
         <div className="post-container">
           <div className="score">
@@ -24,11 +20,10 @@ const Post = ({ post }) => {
             Title: {post.title}
             Author: {post.author}
             <img src={post.url} alt="" />
-            {epochDateConverter(post.created)}
+            <TimeAgo timestamp={post.created_utc} />
           </div>
         </div>
       </Card>
-      </div>
     </article>
   );
 }

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+// RENAME
 import { getSubredditPosts } from "../api/reddit";
 
 const redditAdapter = createEntityAdapter();
@@ -9,7 +10,6 @@ const initialState = redditAdapter.getInitialState({
   status: 'idle',
   error: null
 });
-
 
 // Redux Thunk to get posts from a subreddit
 export const fetchPosts = createAsyncThunk('reddit/fetchPosts', async (subreddit) => {
@@ -25,9 +25,6 @@ export const redditSlice = createSlice({
   name: 'reddit',
   initialState,
   reducers: {
-    // setPosts: (state, action) => {
-    //   state.posts.push(action.payload);
-    // },
     setSearchTerm: (state, action) => {
      state.searchTerm = action.payload;
     },
@@ -44,25 +41,25 @@ export const redditSlice = createSlice({
         
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
-        state.status = 'suceeded'
+        state.status = 'succeeded'
         // add any fetched posts to the array
-        redditAdapter.upsertMany(state, action.payload)
+        redditAdapter.setAll(state, action.payload)
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
       })
-    }
-  })
+  }
+})
   
-  // Action creators are generated for each case reducer function
-  export const { setSearchTerm, setSelectedSubreddit } = redditSlice.actions;
+// Action creators are generated for each case reducer function
+export const { setSearchTerm, setSelectedSubreddit } = redditSlice.actions;
   
-  export default redditSlice.reducer;
+export default redditSlice.reducer;
   
-  // Export the customised selectors for this adapter using 'getSelectors'
-  export const {
-    selectAll: selectAllReddit,
+// Export the customised selectors for this adapter using 'getSelectors'
+export const {
+    selectAll: selectAllRedditPosts,
     selectById: selectPostById,
     selectIds: selectPostIds
     // pass in a selector that returns the posts slice of state
