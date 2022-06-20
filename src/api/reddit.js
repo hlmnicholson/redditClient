@@ -1,6 +1,8 @@
 // Load the data from the server
 export const API_ROOT = 'https://www.reddit.com'
 
+// make all try/catch for error handling?
+
 export const getSubredditPosts = async (subreddit) => {
   const response = await fetch(`${API_ROOT}${subreddit}.json`);
   const json = await response.json();
@@ -23,7 +25,6 @@ export const getSubreddits = async () => {
 export const searchRedditPosts = async (searchTerm) => {
   //trim?
   const query = searchTerm.replaceAll(' ', '%20');
-  console.log(query)
   const response = await fetch(`${API_ROOT}/search.json?q=${query}`);
   const json = await response.json();
   console.log(json);

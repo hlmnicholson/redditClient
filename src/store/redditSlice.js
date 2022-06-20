@@ -1,12 +1,12 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import { useSelector } from 'react-redux';
+import { createSlice, createAsyncThunk, createEntityAdapter, createSelector } from "@reduxjs/toolkit";
+// import { createSelector } from 'react-redux';
 // RENAME
 import { getSubredditPosts, searchRedditPosts } from "../api/reddit";
 
 const redditAdapter = createEntityAdapter();
 
 const initialState = redditAdapter.getInitialState({
-  searchTerm: '',
+  // searchTerm: '',
   selectedSubreddit: '/r/pics/',
   status: 'idle',
   error: null
@@ -36,9 +36,9 @@ export const redditSlice = createSlice({
   name: 'reddit',
   initialState,
   reducers: {
-    setSearchTerm: (state, action) => {
-     state.searchTerm = action.payload;
-    },
+    // setSearchTerm: (state, action) => {
+    //  state.searchTerm = action.payload;
+    // },
     setSelectedSubreddit: (state, action) => {
       state.selectedSubreddit = action.payload;
     },
@@ -67,7 +67,6 @@ export const redditSlice = createSlice({
       .addCase(getSearchResults.fulfilled, (state, action) => {
         state.status = 'succeeded'
         // add any fetched posts to the array
-        console.log(action.payload)
         redditAdapter.setAll(state, action.payload)
       })
       .addCase(getSearchResults.rejected, (state, action) => {
@@ -89,4 +88,3 @@ export const {
     selectIds: selectPostIds
     // pass in a selector that returns the posts slice of state
   } = redditAdapter.getSelectors((state => state.reddit))
-

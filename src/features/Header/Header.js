@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setSearchTerm, getSearchResults } from '../../store/redditSlice';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { getSearchResults } from '../../store/redditSlice';
 import './Header.css';
 
 export const Header = () => {
   const dispatch = useDispatch();
-  // const searchTerm = useSelector(state => state.searchTerm)
   const [ searchTermLocal, setSearchTermLocal ] = useState('');
 
   const onSearchTermChange = (e) => {
     setSearchTermLocal(e.target.value);
-   
   }
 
   const onSearchTermSubmit = (e) => {
     e.preventDefault();
+    if(searchTermLocal !== '') {
       dispatch(getSearchResults(searchTermLocal))
       setSearchTermLocal('');
+    }
   }
 
   return (
