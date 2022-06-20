@@ -1,46 +1,54 @@
 import React, { useEffect } from 'react';
 import Post from '../Post/Post';
-// import { children as posts } from '../../api/mockApi.js';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectRedditState, fetchPosts } from '../../store/redditSlice';
+import { fetchPosts, selectPostIds } from '../../store/redditSlice';
+import { Spinner } from '../../components/Spinner/Spinner';
 
-//get posts in here, dynamically render to posts
-
-const Home = () => {
+export const Home = () => {
   const dispatch = useDispatch();
-  const { posts, searchTerm, selectedSubreddit, status, error } = useSelector(selectRedditState);
   const postStatus = useSelector(state => state.reddit.status)
+  const selectedSubreddit = useSelector(state => state.reddit.selectedSubreddit)
+  // const searchTerm = useSelector(state => state.reddit.searchTerm)
+  // console.log(searchTerm)
+  const postIds = useSelector(selectPostIds)
+  const error = useSelector(state => state.reddit.error)
 
   useEffect(() => {
-    if (postStatus === 'idle') {
       dispatch(fetchPosts(selectedSubreddit))
-    }
-  }, [postStatus, selectedSubreddit, dispatch])
+    }, [selectedSubreddit, dispatch])
+
+  // useEffect(() => {
+  //     dispatch(searchResults(searchTerm))
+  //   }, [searchTerm, dispatch])
+
+/** // FOR SEARCH
+ * useEffect(() => {
+ * dispatch()})
+ */
+
 
   /**
-   * useEffect to dispatch and fetchPosts for selected Subreddit
    * 
    * toggleComments
    * 
-   * 
-   * isLoading functionality?
-   * 
-   * if error?
-   * 
-   * if posts.length === 0
    */
 
-  return (
-    <div className='wrapper'>
-      {posts.map((post, index) => (
-        <Post 
-          key={index}
-          post={post}
-        />
+  let content
 
-      ))}
-    </div>
+  if (postStatus === 'loading') {
+    content = <Spinner test="Loading..." />
+  } else if (postStatus === 'succeeded') {
+    content = postIds.map(postId => (
+      <Post key={postId} postId={postId} />
+      ))
+    } else if (postStatus === 'error') {
+      content = <div>{error}</div>
+    }
+
+
+  return (
+    <section className="post-list">
+    {content}
+    </section>
   );
-}
- 
-export default Home;
+};

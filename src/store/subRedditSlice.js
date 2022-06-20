@@ -1,41 +1,12 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { getSubreddits } from "../api/reddit";
 
-const initialState = {
-  subreddits: [],
+const subredditAdapter = createEntityAdapter();
+
+const initialState = subredditAdapter.getInitialState({
   status: 'idle',
   error: null
-}
-
-export const subredditSlice = createSlice({
-  name: 'subreddits',
-  initialState,
-  reducers: {
-    setSubreddits: (state, action) => {
-      state.subreddits.push(action.payload);
-    }
-  },
-  extraReducers(builder) {
-    builder
-      .addCase(fetchSubreddits.pending, (state, action) => {
-        state.status = 'loading'
-      })
-      .addCase(fetchSubreddits.fulfilled, (state, action) => {
-        state.status = 'suceeded'
-        // add any fetched subreddits to the array
-        state.subreddits = action.payload
-      })
-      .addCase(fetchSubreddits.rejected, (state, action) => {
-        state.status = 'failed'
-        state.error = action.error.message
-      })
-  }
-})
-
-// Action creators are generated for each case reducer function
-export const { setSubreddits } = subredditSlice.actions;
-
-export default subredditSlice.reducer;
+});
 
 // Redux thunk to get list of subreddits
 export const fetchSubreddits = createAsyncThunk('subreddit/fetchSubreddits', async () => {
@@ -47,4 +18,33 @@ export const fetchSubreddits = createAsyncThunk('subreddit/fetchSubreddits', asy
   }
 })
 
-export const selectSubredditState = state => state.subreddits
+export const subredditSlice = createSlice({
+  name: 'subreddit',
+  initialState,
+  reducers: {},
+  extraReducers(builder) {
+    builder
+      .addCase(fetchSubreddits.pending, (state, action) => {
+        state.status = 'loading'
+      })
+      .addCase(fetchSubreddits.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        // add any fetched subreddits to the array
+        subredditAdapter.upsertMany(state, action.payload)
+      })
+      .addCase(fetchSubreddits.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message
+      })
+  }
+})
+
+export default subredditSlice.reducer;
+
+// Export the customised selectors for this adapter using 'getSelectors'
+export const {
+  selectAll: selectAllSubreddits,
+  selectById: selectSubredditById,
+  selectIds: selectSubredditIds
+  // pass in a selector that returns the posts slice of state
+} = subredditAdapter.getSelectors((state => state.subreddit))
