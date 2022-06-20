@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import { useSelector } from 'react-redux';
 // RENAME
-import { getSubredditPosts } from "../api/reddit";
+import { getSubredditPosts, searchRedditPosts } from "../api/reddit";
 
 const redditAdapter = createEntityAdapter();
 
@@ -12,13 +13,23 @@ const initialState = redditAdapter.getInitialState({
 });
 
 // Redux Thunk to get posts from a subreddit
-export const fetchPosts = createAsyncThunk('reddit/fetchPosts', async (subreddit) => {
-  try {
-    const response = await getSubredditPosts(subreddit);
-    return response;
-  } catch (err) {
-    console.log(err);
-  }
+export const fetchPosts = createAsyncThunk('reddit/fetchPosts', async (subreddit, { getState }) => {
+    try {
+      const response = await getSubredditPosts(subreddit);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+})
+
+// Redux Thunk to get posts from a search
+export const getSearchResults = createAsyncThunk('reddit/searchResults', async (searchTerm, { getState }) => {
+    try {
+      const response = await searchRedditPosts(searchTerm);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
 })
 
 export const redditSlice = createSlice({
@@ -31,6 +42,7 @@ export const redditSlice = createSlice({
     setSelectedSubreddit: (state, action) => {
       state.selectedSubreddit = action.payload;
     },
+  
     // voteAdded (can use the logic of reactionAdded from redux tutorial)
 
   },
@@ -38,7 +50,6 @@ export const redditSlice = createSlice({
     builder
       .addCase(fetchPosts.pending, (state, action) => {
         state.status = 'loading'
-        
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = 'succeeded'
@@ -46,6 +57,20 @@ export const redditSlice = createSlice({
         redditAdapter.setAll(state, action.payload)
       })
       .addCase(fetchPosts.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message
+      })
+
+      .addCase(getSearchResults.pending, (state, action) => {
+        state.status = 'loading'
+      })
+      .addCase(getSearchResults.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        // add any fetched posts to the array
+        console.log(action.payload)
+        redditAdapter.setAll(state, action.payload)
+      })
+      .addCase(getSearchResults.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
       })

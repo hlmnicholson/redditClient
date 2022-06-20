@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import Post from '../Post/Post';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPosts, selectPostIds } from '../../store/redditSlice';
+import { fetchPosts, selectPostIds, searchResults } from '../../store/redditSlice';
 import { Spinner } from '../../components/Spinner/Spinner';
 
-const Home = () => {
+export const Home = () => {
   const dispatch = useDispatch();
   const postStatus = useSelector(state => state.reddit.status)
   const selectedSubreddit = useSelector(state => state.reddit.selectedSubreddit)
+  // const searchTerm = useSelector(state => state.reddit.searchTerm)
+  // console.log(searchTerm)
   const postIds = useSelector(selectPostIds)
   const error = useSelector(state => state.reddit.error)
 
@@ -15,18 +17,20 @@ const Home = () => {
       dispatch(fetchPosts(selectedSubreddit))
     }, [selectedSubreddit, dispatch])
 
+  // useEffect(() => {
+  //     dispatch(searchResults(searchTerm))
+  //   }, [searchTerm, dispatch])
+
+/** // FOR SEARCH
+ * useEffect(() => {
+ * dispatch()})
+ */
+
 
   /**
-   * useEffect to dispatch and fetchPosts for selected Subreddit
    * 
    * toggleComments
    * 
-   * 
-   * isLoading functionality?
-   * 
-   * if error?
-   * 
-   * if posts.length === 0
    */
 
   let content
@@ -47,6 +51,4 @@ const Home = () => {
     {content}
     </section>
   );
-}
- 
-export default Home;
+};

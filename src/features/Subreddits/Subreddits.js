@@ -3,13 +3,11 @@ import Card from '../../components/Card/Card';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSubreddits, selectAllSubreddits } from '../../store/subRedditSlice';
 import { setSelectedSubreddit } from '../../store/redditSlice';
-import { Spinner } from '../../components/Spinner/Spinner';
+// import { Spinner } from '../../components/Spinner/Spinner';
 import './Subreddits.css';
 
-const Subreddits = () => {
+export const Subreddits = () => {
   const dispatch = useDispatch();
-  const subredditStatus = useSelector(state => state.subreddit.status)
-  const error = useSelector(state => state.subreddit.error)
   
   useEffect(() => {
     dispatch(fetchSubreddits())
@@ -21,27 +19,25 @@ const Subreddits = () => {
     <div>
       <Card className="subreddit-card">
         <h2>Subreddits</h2>
-                      <ul className="subreddit-list">
-                      {subreddits.map((subreddit) => (
-                        <li 
-                          key={subreddit.id}>
-                          <button 
-                              onClick={() => dispatch(setSelectedSubreddit(subreddit.url))}
-                              type="button"
-                            >
-                            <img 
-                              className="subreddit-icon" 
-                              src={subreddit.icon_img || `https://img.icons8.com/flat-round/344/link--v1.png`} 
-                              alt={`${subreddit.display_name}`} 
-                            />
-                            {subreddit.display_name}
-                          </button>
-                        </li>
-                      ))}
-                      </ul>
-                    </Card>
+          <ul className="subreddit-list">
+            {subreddits.map((subreddit) => (
+              <li 
+                key={subreddit.id}>
+                <button 
+                  onClick={() => dispatch(setSelectedSubreddit(subreddit.url))}
+                  type="button"
+                >
+                  <img 
+                    className="subreddit-icon" 
+                    src={subreddit.icon_img || `https://img.icons8.com/flat-round/344/link--v1.png`} 
+                    alt={`${subreddit.display_name}`} 
+                  />
+                  {subreddit.display_name}
+                </button>
+              </li>
+            ))}
+          </ul>
+          </Card>
     </div>
   );
 }
- 
-export default Subreddits;
