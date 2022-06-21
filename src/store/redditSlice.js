@@ -47,10 +47,10 @@ export const redditSlice = createSlice({
     voteAdded(state, action) {
       const { postId, vote } = action.payload
       const existingPost = state.entities[postId]
-      console.log(vote);
-
-    }
-
+      if (existingPost) {
+        vote === 'upVote' ? existingPost.score++ : existingPost.score--
+        }
+      }
   },
   extraReducers(builder) {
     builder

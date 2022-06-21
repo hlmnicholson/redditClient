@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux/es/exports';
 import Card from '../../components/Card/Card';
 import { selectPostById } from '../../store/redditSlice';
 import { TimeAgo } from './TimeAgo';
+import { VoteButtons } from './VoteButtons';
 import './Post.css';
 
 
@@ -13,10 +14,7 @@ const Post = ({ postId }) => {
     <article className="post-wrapper" key={post.id}>
       <Card>
         <div className="post-container">
-          <button />
-          <div className="score">
-            {post.score}
-          </div>
+          <VoteButtons score={post.score} postId={post.id} />
           <div className="content">
             Title: {post.title}
             Author: {post.author}

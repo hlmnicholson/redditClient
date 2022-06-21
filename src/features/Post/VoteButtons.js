@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { voteAdded } from "../../store/redditSlice";
 
-export const ReactionButtons = ({ post }) => {
+export const VoteButtons = ({ score, postId }) => {
   const dispatch = useDispatch();
 
   return (
@@ -12,16 +12,16 @@ export const ReactionButtons = ({ post }) => {
         type="button"
         className="vote-buttons"
         onClick={() => 
-          dispatch(voteAdded({ postId: post.id, reaction: "upVote" }))}>
+          dispatch(voteAdded({ postId: postId, vote: "upVote" }))}>
           UP
       </button>
-      {post.score}
+      {score}
       <button
       key="downVote"
       type="button"
       className="vote-buttons"
       onClick={() => 
-        dispatch(voteAdded({ postId: post.id, reaction: "downVote" }))}>
+        dispatch(voteAdded({ postId: postId, vote: "downVote" }))}>
         DOWN
       </button>
     </>
