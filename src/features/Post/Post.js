@@ -13,6 +13,7 @@ const Post = ({ postId }) => {
     <article className="post-wrapper" key={post.id}>
       <Card>
         <div className="post-container">
+          <button />
           <div className="score">
             {post.score}
           </div>
