@@ -1,7 +1,6 @@
-import { createSlice, createAsyncThunk, createEntityAdapter, createSelector } from "@reduxjs/toolkit";
-// import { createSelector } from 'react-redux';
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 // RENAME
-import { getSubredditPosts, searchRedditPosts } from "../api/reddit";
+import { getComments, getSubredditPosts, searchRedditPosts } from "../api/reddit";
 
 const redditAdapter = createEntityAdapter();
 
@@ -12,24 +11,45 @@ const initialState = redditAdapter.getInitialState({
   error: null
 });
 
+// adding extra state values to each post
+const postsWithMetaData = (posts) => {
+  return posts.map((post) => ({
+    ...post,
+    showingComments: false,
+    comments: [],
+    loadingComments: false,
+    errorComments: false
+  }));
+}
+
 // Redux Thunk to get posts from a subreddit
-export const fetchPosts = createAsyncThunk('reddit/fetchPosts', async (subreddit, { getState }) => {
+export const fetchPosts = createAsyncThunk('reddit/fetchPosts', async (subreddit) => {
     try {
       const response = await getSubredditPosts(subreddit);
-      return response;
+      return postsWithMetaData(response);
     } catch (err) {
       console.log(err);
     }
 })
 
-// Redux Thunk to get posts from a search
-export const getSearchResults = createAsyncThunk('reddit/searchResults', async (searchTerm, { getState }) => {
+// Redux Thunk to get posts from a search of the API
+export const fetchSearchResults = createAsyncThunk('reddit/fetchSearchResults', async (searchTerm) => {
     try {
       const response = await searchRedditPosts(searchTerm);
-      return response;
+      return postsWithMetaData(response);
     } catch (err) {
       console.log(err);
     }
+})
+
+// Redux Thunk to get comments on selected post
+export const fetchComments = createAsyncThunk('reddit/fetchComments', async (permalink, postId) => {
+  try {
+    const response = await getComments(permalink);
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
 })
 
 export const redditSlice = createSlice({
@@ -50,7 +70,7 @@ export const redditSlice = createSlice({
       if (existingPost) {
         vote === 'upVote' ? existingPost.score++ : existingPost.score--
         }
-      }
+    }
   },
   extraReducers(builder) {
     builder
@@ -66,16 +86,28 @@ export const redditSlice = createSlice({
         state.status = 'failed'
         state.error = action.error.message
       })
-
-      .addCase(getSearchResults.pending, (state, action) => {
+      .addCase(fetchSearchResults.pending, (state, action) => {
         state.status = 'loading'
       })
-      .addCase(getSearchResults.fulfilled, (state, action) => {
+      .addCase(fetchSearchResults.fulfilled, (state, action) => {
         state.status = 'succeeded'
         // add any fetched posts to the array
         redditAdapter.setAll(state, action.payload)
       })
-      .addCase(getSearchResults.rejected, (state, action) => {
+      .addCase(fetchSearchResults.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message
+      })
+      .addCase(fetchComments.pending, (state, action) => {
+        state.status = 'loading'
+      })
+      .addCase(fetchComments.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        console.log(action.payload)
+        // add any fetched posts to the array
+        // redditAdapter.setAll(state, action.payload)
+      })
+      .addCase(fetchComments.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
       })

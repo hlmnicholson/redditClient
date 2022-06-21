@@ -31,3 +31,11 @@ export const searchRedditPosts = async (searchTerm) => {
 
   return json.data.children.map(child => child.data);
 }
+
+// If you want to access the comments on a post:
+
+// https://www.reddit.com/r/pics/comments/vguyij/the_empress_of_uruguay_the_largest_amethyst_geode.json
+
+export const getComments = async (permalink) => {
+  console.log(permalink);
+}

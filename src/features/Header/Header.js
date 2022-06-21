@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getSearchResults } from '../../store/redditSlice';
+import { fetchSearchResults } from '../../store/redditSlice';
 import './Header.css';
 
 export const Header = () => {
@@ -14,7 +14,7 @@ export const Header = () => {
   const onSearchTermSubmit = (e) => {
     e.preventDefault();
     if(searchTermLocal !== '') {
-      dispatch(getSearchResults(searchTermLocal))
+      dispatch(fetchSearchResults(searchTermLocal))
       setSearchTermLocal('');
     }
   }
