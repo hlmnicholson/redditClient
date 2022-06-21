@@ -39,12 +39,18 @@ export const redditSlice = createSlice({
     // setSearchTerm: (state, action) => {
     //  state.searchTerm = action.payload;
     // },
-    setSelectedSubreddit: (state, action) => {
+    setSelectedSubreddit(state, action) {
       state.selectedSubreddit = action.payload;
     },
   
     // voteAdded (can use the logic of reactionAdded from redux tutorial)
-
+    voteAdded(state, action) {
+      const { postId, vote } = action.payload
+      const existingPost = state.entities[postId]
+      if (existingPost) {
+        vote === 'upVote' ? existingPost.score++ : existingPost.score--
+        }
+      }
   },
   extraReducers(builder) {
     builder
@@ -77,7 +83,7 @@ export const redditSlice = createSlice({
 })
   
 // Action creators are generated for each case reducer function
-export const { setSearchTerm, setSelectedSubreddit } = redditSlice.actions;
+export const { setSearchTerm, setSelectedSubreddit, voteAdded } = redditSlice.actions;
   
 export default redditSlice.reducer;
   
