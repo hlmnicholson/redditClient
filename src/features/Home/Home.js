@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Post from '../Post/Post';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPosts, selectPostIds } from '../../store/redditSlice';
+import { fetchComments, fetchPosts, selectPostIds } from '../../store/redditSlice';
 import { Spinner } from '../../components/Spinner/Spinner';
 
 export const Home = () => {
@@ -32,6 +32,7 @@ export const Home = () => {
    * toggleComments
    * 
    */
+
 
   let content
 

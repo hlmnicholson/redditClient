@@ -43,7 +43,7 @@ export const fetchSearchResults = createAsyncThunk('reddit/fetchSearchResults', 
 })
 
 // Redux Thunk to get comments on selected post
-export const fetchComments = createAsyncThunk('reddit/fetchComments', async (permalink, postId) => {
+export const fetchComments = createAsyncThunk('reddit/fetchComments', async (permalink, id) => {
   try {
     const response = await getComments(permalink);
     return response;
@@ -62,14 +62,15 @@ export const redditSlice = createSlice({
     setSelectedSubreddit(state, action) {
       state.selectedSubreddit = action.payload;
     },
-  
-    // voteAdded (can use the logic of reactionAdded from redux tutorial)
     voteAdded(state, action) {
       const { postId, vote } = action.payload
       const existingPost = state.entities[postId]
       if (existingPost) {
         vote === 'upVote' ? existingPost.score++ : existingPost.score--
         }
+    },
+    toggleShowingComments(state, action) {
+      state.posts[action.payload].showingComments = !state.posts[action.payload].showingComments
     }
   },
   extraReducers(builder) {
@@ -99,23 +100,31 @@ export const redditSlice = createSlice({
         state.error = action.error.message
       })
       .addCase(fetchComments.pending, (state, action) => {
-        state.status = 'loading'
+        // state.status = 'loading'
+        // Don't fetch comments if they're set as hidden
+        // ******EXAMINE THIS*******
+        state.posts[action.payload].showingComments = !state.posts[action.payload].showingComments;
+        if (!state.posts[action.payload].showingComments) {
+          return;
+        }
+        state.posts[action.payload.index].loadingComments = true;
+
       })
       .addCase(fetchComments.fulfilled, (state, action) => {
-        state.status = 'succeeded'
-        console.log(action.payload)
+        // state.status = 'succeeded'
+        
         // add any fetched posts to the array
-        // redditAdapter.setAll(state, action.payload)
+        redditAdapter.setAll(state.comments, action.payload)
       })
       .addCase(fetchComments.rejected, (state, action) => {
-        state.status = 'failed'
+        // state.status = 'failed'
         state.error = action.error.message
       })
   }
 })
   
 // Action creators are generated for each case reducer function
-export const { setSearchTerm, setSelectedSubreddit, voteAdded } = redditSlice.actions;
+export const { setSelectedSubreddit, voteAdded } = redditSlice.actions;
   
 export default redditSlice.reducer;
   
