@@ -38,7 +38,7 @@ export const searchRedditPosts = async (searchTerm) => {
 export const getComments = async (permalink) => {
   const response = await fetch(`${API_ROOT}${permalink}.json`);
   const json = await response.json();
-  const trimJson = json.slice(1);
-
-  return trimJson.data.children.map(child => child.data)
+  console.log(json.slice(1)[0].data.children)
+  
+  return json.slice(1)[0].data.children.map(child => child.data)
 }

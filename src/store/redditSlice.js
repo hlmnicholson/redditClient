@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 // RENAME
-import { getComments, getSubredditPosts, searchRedditPosts } from "../api/reddit";
+import { getSubredditPosts, searchRedditPosts } from "../api/reddit";
+
+import { fetchComments } from './commentSlice';
 
 const redditAdapter = createEntityAdapter();
 
@@ -16,9 +18,7 @@ const postsWithMetaData = (posts) => {
   return posts.map((post) => ({
     ...post,
     showingComments: false,
-    comments: [],
-    loadingComments: false,
-    errorComments: false
+    ...fetchComments(post.id, post.permalink),
   }));
 }
 
@@ -42,16 +42,6 @@ export const fetchSearchResults = createAsyncThunk('reddit/fetchSearchResults', 
     }
 })
 
-// Redux Thunk to get comments on selected post
-export const fetchComments = createAsyncThunk('reddit/fetchComments', async (permalink, id) => {
-  try {
-    const response = await getComments(permalink);
-    return response;
-  } catch (err) {
-    console.log(err);
-  }
-})
-
 export const redditSlice = createSlice({
   name: 'reddit',
   initialState,
@@ -70,8 +60,17 @@ export const redditSlice = createSlice({
         }
     },
     toggleShowingComments(state, action) {
-      state.posts[action.payload].showingComments = !state.posts[action.payload].showingComments
-    }
+      /**
+       *const { postId, vote } = action.payload
+      const existingPost = state.entities[postId]
+       */
+      const {postId} = action.payload
+      const existingPost = state.entities[postId]
+      console.log(existingPost.showingComments);
+      if (existingPost) {
+        existingPost.showingComments = !existingPost.showingComments
+      }
+    },
   },
   extraReducers(builder) {
     builder
@@ -99,32 +98,11 @@ export const redditSlice = createSlice({
         state.status = 'failed'
         state.error = action.error.message
       })
-      .addCase(fetchComments.pending, (state, action) => {
-        // state.status = 'loading'
-        // Don't fetch comments if they're set as hidden
-        // ******EXAMINE THIS*******
-        state.posts[action.payload].showingComments = !state.posts[action.payload].showingComments;
-        if (!state.posts[action.payload].showingComments) {
-          return;
-        }
-        state.posts[action.payload.index].loadingComments = true;
-
-      })
-      .addCase(fetchComments.fulfilled, (state, action) => {
-        // state.status = 'succeeded'
-        
-        // add any fetched posts to the array
-        redditAdapter.setAll(state.comments, action.payload)
-      })
-      .addCase(fetchComments.rejected, (state, action) => {
-        // state.status = 'failed'
-        state.error = action.error.message
-      })
   }
 })
   
 // Action creators are generated for each case reducer function
-export const { setSelectedSubreddit, voteAdded } = redditSlice.actions;
+export const { setSelectedSubreddit, voteAdded, toggleShowingComments } = redditSlice.actions;
   
 export default redditSlice.reducer;
   

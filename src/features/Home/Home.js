@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import Post from '../Post/Post';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchComments, fetchPosts, selectPostIds } from '../../store/redditSlice';
+import { fetchPosts, selectPostIds } from '../../store/redditSlice';
+import { fetchComments } from '../../store/commentSlice';
 import { Spinner } from '../../components/Spinner/Spinner';
 
 export const Home = () => {
@@ -32,15 +33,21 @@ export const Home = () => {
    * toggleComments
    * 
    */
-
+   const onToggleComments = () =>{
+     const getComments = (permalink) => {
+      console.log(permalink)
+      dispatch(fetchComments(permalink))
+    }
+    return getComments;
+  }
 
   let content
 
   if (postStatus === 'loading') {
     content = <Spinner test="Loading..." />
   } else if (postStatus === 'succeeded') {
-    content = postIds.map(postId => (
-      <Post key={postId} postId={postId} />
+    content = postIds.map((postId) => (
+      <Post key={postId} postId={postId} onToggleComments={onToggleComments()} />
       ))
     } else if (postStatus === 'error') {
       content = <div>{error}</div>
